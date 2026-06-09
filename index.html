@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentCore — Autonomous Task Automator</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     SCANLINE OVERLAY
+══════════════════════════════════════════════════ -->
+<div class="scanlines" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-left">
+    <div class="logo-mark" aria-hidden="true">⬡</div>
+    <div class="header-titles">
+      <h1 class="site-title">AgentCore</h1>
+      <span class="site-sub">Autonomous Task Automator · Microsoft Agents League</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="status-pill" id="agentStatusPill">
+      <span class="pulse-dot" id="agentPulseDot"></span>
+      <span id="agentStatusLabel">ONLINE</span>
+    </div>
+    <div class="header-clock" id="liveClock">00:00:00</div>
+    <div class="header-uptime">
+      Uptime: <span id="uptimeCounter">00:00:00</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════
+     MAIN GRID
+══════════════════════════════════════════════════ -->
+<main class="dashboard-grid">
+
+  <!-- ── Analytics Cards ──────────────────────────── -->
+  <section class="card-row" aria-label="Agent statistics">
+    <div class="stat-card" id="cardTotal">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-body">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Tasks Executed</div>
+      </div>
+      <div class="stat-sparkline" id="sparkTotal"></div>
+    </div>
+    <div class="stat-card success" id="cardSuccess">
+      <div class="stat-icon">✓</div>
+      <div class="stat-body">
+        <div class="stat-value" id="statSuccess">0</div>
+        <div class="stat-label">Successful</div>
+      </div>
+    </div>
+    <div class="stat-card danger" id="cardFailed">
+      <div class="stat-icon">✕</div>
+      <div class="stat-body">
+        <div class="stat-value" id="statFailed">0</div>
+        <div class="stat-label">Failed</div>
+      </div>
+    </div>
+    <div class="stat-card accent" id="cardThreads">
+      <div class="stat-icon">⟳</div>
+      <div class="stat-body">
+        <div class="stat-value" id="statThreads">0</div>
+        <div class="stat-label">Active Threads</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Left Column ──────────────────────────────── -->
+  <div class="col-left">
+
+    <!-- Chat Console -->
+    <section class="panel chat-panel">
+      <div class="panel-header">
+        <span class="panel-badge blue"></span>
+        <h2 class="panel-title">Command Console</h2>
+        <button class="btn-icon" id="clearChatBtn" title="Clear console">⌫</button>
+      </div>
+
+      <div class="chat-log" id="chatLog" role="log" aria-live="polite">
+        <div class="chat-msg system">
+          <span class="msg-icon">⬡</span>
+          <span class="msg-text">AgentCore v1.0 online. Enter a command to begin.</span>
+        </div>
+      </div>
+
+      <div class="suggestions" id="suggestions">
+        <span class="sug-label">Quick&nbsp;actions:</span>
+        <button class="sug-btn" data-cmd="schedule backup">schedule backup</button>
+        <button class="sug-btn" data-cmd="generate report">generate report</button>
+        <button class="sug-btn" data-cmd="sync database">sync database</button>
+        <button class="sug-btn" data-cmd="analyze system">analyze system</button>
+        <button class="sug-btn" data-cmd="check server health">check server health</button>
+        <button class="sug-btn" data-cmd="run security scan">run security scan</button>
+        <button class="sug-btn" data-cmd="show task history">show task history</button>
+      </div>
+
+      <div class="chat-input-row">
+        <div class="input-prefix">&gt;_</div>
+        <input
+          id="cmdInput"
+          class="cmd-input"
+          type="text"
+          placeholder="Enter agent command…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Agent command input"
+        />
+        <button class="btn-send" id="sendBtn" aria-label="Send">EXEC</button>
+      </div>
+    </section>
+
+    <!-- Error Center -->
+    <section class="panel error-panel">
+      <div class="panel-header">
+        <span class="panel-badge red"></span>
+        <h2 class="panel-title">Error Center</h2>
+        <button class="btn-icon" id="clearErrorBtn" title="Dismiss errors">⌫</button>
+      </div>
+      <div class="error-log" id="errorLog">
+        <div class="error-empty">No errors detected — all systems nominal.</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ── Right Column ─────────────────────────────── -->
+  <div class="col-right">
+
+    <!-- Activity Feed -->
+    <section class="panel activity-panel">
+      <div class="panel-header">
+        <span class="panel-badge green"></span>
+        <h2 class="panel-title">Activity Feed</h2>
+        <span class="live-tag">LIVE</span>
+      </div>
+      <div class="activity-log" id="activityLog" role="log" aria-live="polite"></div>
+    </section>
+
+    <!-- Task Monitor -->
+    <section class="panel task-panel">
+      <div class="panel-header">
+        <span class="panel-badge yellow"></span>
+        <h2 class="panel-title">Task Monitor</h2>
+        <button class="btn-secondary" id="exportBtn">⬇ Export</button>
+      </div>
+
+      <div class="task-table-wrap">
+        <table class="task-table" aria-label="Task execution list">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Task Name</th>
+              <th>Status</th>
+              <th>Duration</th>
+              <th>Thread</th>
+            </tr>
+          </thead>
+          <tbody id="taskTableBody">
+            <tr class="table-empty">
+              <td colspan="5">No tasks dispatched yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════
+     AI THINKING OVERLAY
+══════════════════════════════════════════════════ -->
+<div class="thinking-overlay" id="thinkingOverlay" aria-hidden="true">
+  <div class="thinking-box">
+    <div class="thinking-ring"></div>
+    <div class="thinking-text" id="thinkingText">Agent reasoning…</div>
+  </div>
+</div>
+</body>
+</html>
