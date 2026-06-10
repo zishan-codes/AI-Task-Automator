@@ -1,4 +1,4 @@
-# 🤖 AI-Driven Autonomous Task Automator Agent
+# 🤖 Agent-Based Autonomous Task Automator
 
 A next-generation autonomous agent platform designed to streamline enterprise operations through intelligent task automation. The system accepts natural language commands, schedules background operations, manages task execution asynchronously, and provides real-time monitoring through a modern cyberpunk-inspired dashboard.
 
@@ -29,7 +29,7 @@ Built for the **Microsoft Agents League Hackathon**, this project demonstrates t
 User Command
       │
       ▼
-AI Agent Interface
+Intelligent Agent Interface
       │
       ▼
 Task Manager
@@ -186,7 +186,16 @@ The goal of this project is to showcase how autonomous agents can simplify repet
 
 ## 👨‍💻 Developer
 
-Developed as a hackathon project to explore autonomous agent systems, enterprise automation, and modern task orchestration using Java and web technologies.
+Developed for the Microsoft Agents League Hackathon to demonstrate agent-based task orchestration, concurrent execution, and enterprise workflow automation using Core Java and modern web technologies.
+
+The project focuses on simulating autonomous agent behavior through intelligent command interpretation, asynchronous task processing, lifecycle management, monitoring dashboards, and fault-tolerant execution workflows.
+
+
+---
+
+## 🌐 Live Demo
+
+🔗 https://zishan-codes.github.io/AI-Task-Automator/
 
 ---
 
